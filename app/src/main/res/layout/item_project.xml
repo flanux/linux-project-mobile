@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:background="?attr/selectableItemBackground">
+    
+    <TextView
+        android:id="@+id/projectName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Project Name"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:textColor="#000000" />
+    
+    <TextView
+        android:id="@+id/projectCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:text="Category"
+        android:textSize="11sp"
+        android:textColor="#FFFFFF"
+        android:background="#7B1FA2"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp" />
+    
+    <TextView
+        android:id="@+id/projectDesc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Description"
+        android:textSize="13sp"
+        android:textColor="#666666"
+        android:maxLines="2"
+        android:ellipsize="end" />
+        
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="#E0E0E0" />
+        
+</LinearLayout>

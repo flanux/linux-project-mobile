@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:background="?attr/selectableItemBackground">
+    
+    <TextView
+        android:id="@+id/learningTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Learning Resource"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:textColor="#000000" />
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:orientation="horizontal">
+        
+        <TextView
+            android:id="@+id/learningType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Type"
+            android:textSize="12sp"
+            android:textColor="#388E3C"
+            android:layout_marginRight="8dp" />
+        
+        <TextView
+            android:id="@+id/learningSource"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Source"
+            android:textSize="12sp"
+            android:textColor="#666666" />
+            
+    </LinearLayout>
+        
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="#E0E0E0" />
+        
+</LinearLayout>
