@@ -1,9 +1,99 @@
 {
-  "internships": [],
-  "jobs": [],
-  "news": [],
-  "projects": [],
-  "learning": [],
-  "last_updated": "2025-01-01T00:00:00",
+  "internships": [
+    {
+      "title": "Linux Kernel Mentorship Program",
+      "organization": "Linux Foundation",
+      "description": "Hands-on mentorship for Linux kernel development. Check the LFX platform for current opportunities.",
+      "link": "https://mentorship.lfx.linuxfoundation.org/projects",
+      "type": "mentorship"
+    }
+  ],
+  "jobs": [
+    {
+      "title": "Check Linux Foundation Careers",
+      "company": "Linux Foundation",
+      "location": "Various",
+      "link": "https://www.linuxfoundation.org/about/careers"
+    }
+  ],
+  "news": [
+    {
+      "title": "the LWN FAQ",
+      "source": "LWN.net",
+      "link": "https://lwn.net/op/FAQ.lwn",
+      "date": "2026-03-22"
+    }
+  ],
+  "projects": [
+    {
+      "name": "Linux Kernel",
+      "description": "The core of the Linux operating system",
+      "link": "https://www.kernel.org/",
+      "category": "Core"
+    },
+    {
+      "name": "Kubernetes",
+      "description": "Container orchestration platform",
+      "link": "https://kubernetes.io/",
+      "category": "CNCF"
+    },
+    {
+      "name": "Node.js",
+      "description": "JavaScript runtime built on Chrome V8",
+      "link": "https://nodejs.org/",
+      "category": "OpenJS Foundation"
+    }
+  ],
+  "learning": [
+    {
+      "title": "Comments",
+      "type": "Tutorial",
+      "link": "https://kernelnewbies.org#",
+      "source": "Kernel Newbies"
+    },
+    {
+      "title": "Immutable Page",
+      "type": "Tutorial",
+      "link": "https://kernelnewbies.org",
+      "source": "Kernel Newbies"
+    },
+    {
+      "title": "RecentChanges",
+      "type": "Tutorial",
+      "link": "https://kernelnewbies.org/RecentChanges",
+      "source": "Kernel Newbies"
+    },
+    {
+      "title": "FindPage",
+      "type": "Tutorial",
+      "link": "https://kernelnewbies.org/FindPage",
+      "source": "Kernel Newbies"
+    },
+    {
+      "title": "Local Site Map",
+      "type": "Tutorial",
+      "link": "https://kernelnewbies.org/Documents?action=LocalSiteMap",
+      "source": "Kernel Newbies"
+    },
+    {
+      "title": "HelpContents",
+      "type": "Tutorial",
+      "link": "https://kernelnewbies.org/HelpContents",
+      "source": "Kernel Newbies"
+    },
+    {
+      "title": "HelpOnMoinWikiSyntax",
+      "type": "Tutorial",
+      "link": "https://kernelnewbies.org/HelpOnMoinWikiSyntax",
+      "source": "Kernel Newbies"
+    },
+    {
+      "title": "Attachments",
+      "type": "Tutorial",
+      "link": "https://kernelnewbies.org/Documents?action=AttachFile",
+      "source": "Kernel Newbies"
+    }
+  ],
+  "last_updated": "2026-03-22T10:16:31.512757",
   "version": "1.0"
 }
