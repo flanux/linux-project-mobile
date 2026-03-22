@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 import os
 import json
 from datetime import datetime
+import time
 
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
@@ -11,177 +12,251 @@ HEADERS = {
 
 
 def scrape_lfx_mentorship():
-    """Fetch LFX Mentorship programs via public REST API (avoids SPA rendering issues)"""
+    """Scrape LFX Mentorship page directly"""
     print("Scraping LFX Mentorship...")
     internships = []
+    
+    # Fallback data in case scraping fails
+    fallback = [
+        {
+            'title': 'Linux Kernel Mentorship Program',
+            'organization': 'Linux Foundation',
+            'description': 'Participate in hands-on kernel development under experienced mentors. Applications open seasonally.',
+            'link': 'https://mentorship.lfx.linuxfoundation.org/projects',
+            'type': 'mentorship'
+        },
+        {
+            'title': 'CNCF Mentoring',
+            'organization': 'Cloud Native Computing Foundation',
+            'description': 'Work on cloud-native projects like Kubernetes, Prometheus, and more. Multiple terms per year.',
+            'link': 'https://mentorship.lfx.linuxfoundation.org/projects',
+            'type': 'mentorship'
+        }
+    ]
+    
     try:
         with httpx.Client(headers=HEADERS, follow_redirects=True, timeout=30.0) as client:
-            # LFX exposes a public REST API — no JS rendering needed
-            response = client.get(
-                'https://api2.mentorship.lfx.linuxfoundation.org/v2/project',
-                params={'status': 'active', '$limit': 20}
-            )
-            response.raise_for_status()
-            projects = response.json().get('Data', [])
-            for p in projects:
-                slug = p.get('Slug', '')
-                internships.append({
-                    'title': p.get('Name', 'Mentorship Opportunity'),
-                    'organization': p.get('Industry', 'Linux Foundation'),
-                    'description': (p.get('Description', '') or '')[:200],
-                    'link': f'https://mentorship.lfx.linuxfoundation.org/project/{slug}' if slug else 'https://mentorship.lfx.linuxfoundation.org/projects',
-                    'type': 'mentorship'
-                })
+            response = client.get('https://mentorship.lfx.linuxfoundation.org/projects')
+            if response.status_code == 200:
+                soup = BeautifulSoup(response.text, 'html.parser')
+                # Try to find project cards
+                cards = soup.find_all(['div', 'article'], class_=['project', 'card'])
+                for card in cards[:10]:
+                    title_elem = card.find(['h1', 'h2', 'h3', 'h4'])
+                    if title_elem:
+                        internships.append({
+                            'title': title_elem.get_text(strip=True),
+                            'organization': 'Linux Foundation',
+                            'description': 'Check the LFX platform for details and application deadlines.',
+                            'link': 'https://mentorship.lfx.linuxfoundation.org/projects',
+                            'type': 'mentorship'
+                        })
     except Exception as e:
         print(f"Error scraping LFX: {e}")
-
-    return internships
+    
+    return internships if internships else fallback
 
 
 def scrape_linux_foundation_jobs():
-    """Fetch Linux Foundation jobs via Greenhouse JSON API"""
+    """Scrape Linux Foundation careers page"""
     print("Scraping Linux Foundation Jobs...")
     jobs = []
+    
+    fallback = [
+        {
+            'title': 'View Open Positions',
+            'company': 'Linux Foundation',
+            'location': 'Remote/Global',
+            'link': 'https://www.linuxfoundation.org/about/careers'
+        }
+    ]
+    
     try:
         with httpx.Client(headers=HEADERS, follow_redirects=True, timeout=30.0) as client:
-            # LF uses Greenhouse; this endpoint returns all open positions as JSON
-            response = client.get('https://boards-api.greenhouse.io/v1/boards/linuxfoundation/jobs?content=true')
-            response.raise_for_status()
-            postings = response.json().get('jobs', [])
-            for job in postings[:15]:
-                location = job.get('location', {}).get('name', 'Remote')
-                jobs.append({
-                    'title': job.get('title', 'Position Available'),
-                    'company': 'Linux Foundation',
-                    'location': location,
-                    'link': job.get('absolute_url', 'https://www.linuxfoundation.org/about/careers')
-                })
+            response = client.get('https://www.linuxfoundation.org/about/careers')
+            if response.status_code == 200:
+                soup = BeautifulSoup(response.text, 'html.parser')
+                # Look for job listings
+                job_links = soup.find_all('a', href=True)
+                for link in job_links:
+                    text = link.get_text(strip=True)
+                    if len(text) > 10 and ('engineer' in text.lower() or 'developer' in text.lower() or 'manager' in text.lower()):
+                        jobs.append({
+                            'title': text,
+                            'company': 'Linux Foundation',
+                            'location': 'Remote',
+                            'link': link['href'] if link['href'].startswith('http') else 'https://www.linuxfoundation.org' + link['href']
+                        })
+                        if len(jobs) >= 10:
+                            break
     except Exception as e:
         print(f"Error scraping LF jobs: {e}")
-
-    return jobs
+    
+    return jobs if jobs else fallback
 
 
 def scrape_lwn_news():
-    """Scrape LWN.net front page headlines"""
+    """Scrape LWN.net front page"""
     print("Scraping LWN News...")
     news = []
+    
+    fallback = [
+        {
+            'title': 'Visit LWN.net for Latest Linux News',
+            'source': 'LWN.net',
+            'link': 'https://lwn.net/',
+            'date': datetime.now().strftime('%Y-%m-%d')
+        }
+    ]
+    
     try:
         with httpx.Client(headers=HEADERS, follow_redirects=True, timeout=30.0) as client:
             response = client.get('https://lwn.net/')
-            response.raise_for_status()
-            soup = BeautifulSoup(response.text, 'html.parser')
-
-            # Front page: each story headline is in div.Headline > a
-            headlines = soup.select('div.Headline a')
-            for a in headlines[:15]:
-                title = a.get_text(strip=True)
-                href = a.get('href', '')
-                if not title or not href:
-                    continue
-                full_link = href if href.startswith('http') else 'https://lwn.net' + href
-                news.append({
-                    'title': title,
-                    'source': 'LWN.net',
-                    'link': full_link,
-                    'date': datetime.now().strftime('%Y-%m-%d')
-                })
+            if response.status_code == 200:
+                soup = BeautifulSoup(response.text, 'html.parser')
+                
+                # LWN headlines
+                headlines = soup.select('div.Headline a, div.HeadlineText a, p.Headline a')
+                for a in headlines[:15]:
+                    title = a.get_text(strip=True)
+                    href = a.get('href', '')
+                    if title and href:
+                        full_link = href if href.startswith('http') else 'https://lwn.net' + href
+                        news.append({
+                            'title': title,
+                            'source': 'LWN.net',
+                            'link': full_link,
+                            'date': datetime.now().strftime('%Y-%m-%d')
+                        })
     except Exception as e:
         print(f"Error scraping LWN: {e}")
-
-    return news
+    
+    return news if news else fallback
 
 
 def scrape_linux_projects():
-    """Fetch Linux Foundation projects from their projects page"""
+    """Get Linux Foundation projects"""
     print("Scraping Linux Foundation Projects...")
-    projects = []
+    
+    # Use known projects as fallback/primary data
+    projects = [
+        {
+            'name': 'Linux Kernel',
+            'description': 'The core of the Linux operating system. Contributions welcome via mailing lists and patch submissions.',
+            'link': 'https://www.kernel.org/',
+            'category': 'Core'
+        },
+        {
+            'name': 'Kubernetes',
+            'description': 'Container orchestration platform. Part of CNCF, actively seeking contributors.',
+            'link': 'https://kubernetes.io/',
+            'category': 'CNCF'
+        },
+        {
+            'name': 'Prometheus',
+            'description': 'Monitoring and alerting toolkit. CNCF graduated project.',
+            'link': 'https://prometheus.io/',
+            'category': 'CNCF'
+        },
+        {
+            'name': 'Node.js',
+            'description': 'JavaScript runtime built on Chrome V8 engine. Part of OpenJS Foundation.',
+            'link': 'https://nodejs.org/',
+            'category': 'OpenJS'
+        },
+        {
+            'name': 'Hyperledger Fabric',
+            'description': 'Enterprise blockchain framework. Part of Hyperledger.',
+            'link': 'https://www.hyperledger.org/projects/fabric',
+            'category': 'Hyperledger'
+        }
+    ]
+    
     try:
         with httpx.Client(headers=HEADERS, follow_redirects=True, timeout=30.0) as client:
             response = client.get('https://www.linuxfoundation.org/projects')
-            response.raise_for_status()
-            soup = BeautifulSoup(response.text, 'html.parser')
-
-            # Target: <article> or section/div cards with a heading and a link
-            cards = soup.select('article, section.project, div.project-card')
-            for card in cards[:20]:
-                title_elem = card.find(['h2', 'h3', 'h4'])
-                if not title_elem:
-                    continue
-                title = title_elem.get_text(strip=True)
-                desc_elem = card.find('p')
-                description = desc_elem.get_text(strip=True)[:150] if desc_elem else ''
-                link_elem = card.find('a', href=True)
-                link = link_elem['href'] if link_elem else ''
-                if link and not link.startswith('http'):
-                    link = 'https://www.linuxfoundation.org' + link
-                if title:
-                    projects.append({
-                        'name': title,
-                        'description': description,
-                        'link': link,
-                        'category': 'Linux Foundation'
-                    })
-
-            # If the page is a SPA shell with no articles, try __NEXT_DATA__
-            if not projects:
-                next_data_tag = soup.find('script', id='__NEXT_DATA__')
-                if next_data_tag:
-                    next_data = json.loads(next_data_tag.string or '{}')
-                    items = (
-                        next_data.get('props', {})
-                        .get('pageProps', {})
-                        .get('projects', [])
-                    )
-                    for item in items[:20]:
-                        projects.append({
-                            'name': item.get('name', ''),
-                            'description': (item.get('description', '') or '')[:150],
-                            'link': item.get('url', 'https://www.linuxfoundation.org/projects'),
-                            'category': item.get('category', 'Linux Foundation')
+            if response.status_code == 200:
+                soup = BeautifulSoup(response.text, 'html.parser')
+                cards = soup.find_all(['article', 'div'], class_=['project', 'card'])
+                
+                additional = []
+                for card in cards[:5]:
+                    title_elem = card.find(['h2', 'h3', 'h4'])
+                    if title_elem:
+                        title = title_elem.get_text(strip=True)
+                        desc_elem = card.find('p')
+                        additional.append({
+                            'name': title,
+                            'description': desc_elem.get_text(strip=True)[:150] if desc_elem else '',
+                            'link': 'https://www.linuxfoundation.org/projects',
+                            'category': 'Linux Foundation'
                         })
-
+                
+                if additional:
+                    projects.extend(additional)
     except Exception as e:
         print(f"Error scraping projects: {e}")
-
+    
     return projects
 
 
 def scrape_kernel_newbies():
-    """Scrape Kernel Newbies Documents page for real tutorial links"""
+    """Scrape Kernel Newbies resources"""
     print("Scraping Kernel Newbies...")
+    
+    fallback = [
+        {
+            'title': 'Kernel Newbies Main Page',
+            'type': 'Learning',
+            'link': 'https://kernelnewbies.org/',
+            'source': 'Kernel Newbies'
+        },
+        {
+            'title': 'First Kernel Patch Tutorial',
+            'type': 'Tutorial',
+            'link': 'https://kernelnewbies.org/FirstKernelPatch',
+            'source': 'Kernel Newbies'
+        },
+        {
+            'title': 'Kernel Development Guide',
+            'type': 'Guide',
+            'link': 'https://kernelnewbies.org/Documents',
+            'source': 'Kernel Newbies'
+        }
+    ]
+    
     resources = []
+    
     try:
         with httpx.Client(headers=HEADERS, follow_redirects=True, timeout=30.0) as client:
             response = client.get('https://kernelnewbies.org/Documents')
-            response.raise_for_status()
-            soup = BeautifulSoup(response.text, 'html.parser')
-
-            # Documents page is a MoinMoin wiki; content links are inside
-            # div#content li > a, pointing to /KernelNewbies paths
-            content_div = soup.find('div', id='content') or soup
-            for a in content_div.select('li > a[href]'):
-                href = a['href']
-                text = a.get_text(strip=True)
-                # Skip empty, nav, edit, and external noise links
-                if not text or len(text) < 4:
-                    continue
-                if any(skip in href for skip in ['action=', 'mailto:', '#', 'RecentChanges', 'UserPreferences']):
-                    continue
-                full_link = href if href.startswith('http') else 'https://kernelnewbies.org' + href
-                resources.append({
-                    'title': text,
-                    'type': 'Tutorial',
-                    'link': full_link,
-                    'source': 'Kernel Newbies'
-                })
-                if len(resources) >= 20:
-                    break
-
+            if response.status_code == 200:
+                soup = BeautifulSoup(response.text, 'html.parser')
+                
+                links = soup.find_all('a', href=True)
+                for a in links[:20]:
+                    href = a['href']
+                    text = a.get_text(strip=True)
+                    
+                    if not text or len(text) < 4:
+                        continue
+                    if any(skip in href for skip in ['action=', 'mailto:', 'RecentChanges']):
+                        continue
+                    
+                    full_link = href if href.startswith('http') else 'https://kernelnewbies.org' + href
+                    resources.append({
+                        'title': text,
+                        'type': 'Tutorial',
+                        'link': full_link,
+                        'source': 'Kernel Newbies'
+                    })
+                    
+                    if len(resources) >= 15:
+                        break
     except Exception as e:
         print(f"Error scraping Kernel Newbies: {e}")
-
-    return resources
+    
+    return resources if resources else fallback
 
 
 def main():

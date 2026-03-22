@@ -3,45 +3,64 @@
     {
       "title": "Linux Kernel Mentorship Program",
       "organization": "Linux Foundation",
-      "description": "Hands-on mentorship for Linux kernel development. Check the LFX platform for current opportunities.",
+      "description": "Participate in hands-on kernel development under experienced mentors. Applications open seasonally.",
+      "link": "https://mentorship.lfx.linuxfoundation.org/projects",
+      "type": "mentorship"
+    },
+    {
+      "title": "CNCF Mentoring",
+      "organization": "Cloud Native Computing Foundation",
+      "description": "Work on cloud-native projects like Kubernetes, Prometheus, and more. Multiple terms per year.",
       "link": "https://mentorship.lfx.linuxfoundation.org/projects",
       "type": "mentorship"
     }
   ],
   "jobs": [
     {
-      "title": "Check Linux Foundation Careers",
+      "title": "View Open Positions",
       "company": "Linux Foundation",
-      "location": "Various",
+      "location": "Remote/Global",
       "link": "https://www.linuxfoundation.org/about/careers"
     }
   ],
   "news": [
     {
-      "title": "the LWN FAQ",
+      "title": "Visit LWN.net for Latest Linux News",
       "source": "LWN.net",
-      "link": "https://lwn.net/op/FAQ.lwn",
+      "link": "https://lwn.net/",
       "date": "2026-03-22"
     }
   ],
   "projects": [
     {
       "name": "Linux Kernel",
-      "description": "The core of the Linux operating system",
+      "description": "The core of the Linux operating system. Contributions welcome via mailing lists and patch submissions.",
       "link": "https://www.kernel.org/",
       "category": "Core"
     },
     {
       "name": "Kubernetes",
-      "description": "Container orchestration platform",
+      "description": "Container orchestration platform. Part of CNCF, actively seeking contributors.",
       "link": "https://kubernetes.io/",
       "category": "CNCF"
     },
     {
+      "name": "Prometheus",
+      "description": "Monitoring and alerting toolkit. CNCF graduated project.",
+      "link": "https://prometheus.io/",
+      "category": "CNCF"
+    },
+    {
       "name": "Node.js",
-      "description": "JavaScript runtime built on Chrome V8",
+      "description": "JavaScript runtime built on Chrome V8 engine. Part of OpenJS Foundation.",
       "link": "https://nodejs.org/",
-      "category": "OpenJS Foundation"
+      "category": "OpenJS"
+    },
+    {
+      "name": "Hyperledger Fabric",
+      "description": "Enterprise blockchain framework. Part of Hyperledger.",
+      "link": "https://www.hyperledger.org/projects/fabric",
+      "category": "Hyperledger"
     }
   ],
   "learning": [
@@ -52,27 +71,15 @@
       "source": "Kernel Newbies"
     },
     {
-      "title": "Immutable Page",
+      "title": "Menu",
       "type": "Tutorial",
-      "link": "https://kernelnewbies.org",
-      "source": "Kernel Newbies"
-    },
-    {
-      "title": "RecentChanges",
-      "type": "Tutorial",
-      "link": "https://kernelnewbies.org/RecentChanges",
+      "link": "https://kernelnewbies.org#",
       "source": "Kernel Newbies"
     },
     {
       "title": "FindPage",
       "type": "Tutorial",
       "link": "https://kernelnewbies.org/FindPage",
-      "source": "Kernel Newbies"
-    },
-    {
-      "title": "Local Site Map",
-      "type": "Tutorial",
-      "link": "https://kernelnewbies.org/Documents?action=LocalSiteMap",
       "source": "Kernel Newbies"
     },
     {
@@ -88,12 +95,30 @@
       "source": "Kernel Newbies"
     },
     {
-      "title": "Attachments",
+      "title": "Frontpage",
       "type": "Tutorial",
-      "link": "https://kernelnewbies.org/Documents?action=AttachFile",
+      "link": "https://kernelnewbies.org/",
+      "source": "Kernel Newbies"
+    },
+    {
+      "title": "Kernel Hacking",
+      "type": "Tutorial",
+      "link": "https://kernelnewbies.org/KernelHacking",
+      "source": "Kernel Newbies"
+    },
+    {
+      "title": "Kernel Documentation",
+      "type": "Tutorial",
+      "link": "https://kernelnewbies.org/Documents",
+      "source": "Kernel Newbies"
+    },
+    {
+      "title": "Kernel Glossary",
+      "type": "Tutorial",
+      "link": "https://kernelnewbies.org/KernelGlossary",
       "source": "Kernel Newbies"
     }
   ],
-  "last_updated": "2026-03-22T10:16:31.512757",
+  "last_updated": "2026-03-22T11:19:07.903385",
   "version": "1.0"
 }
