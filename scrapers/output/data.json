@@ -28,7 +28,7 @@
       "title": "Visit LWN.net for Latest Linux News",
       "source": "LWN.net",
       "link": "https://lwn.net/",
-      "date": "2026-04-29"
+      "date": "2026-04-30"
     }
   ],
   "projects": [
@@ -65,60 +65,24 @@
   ],
   "learning": [
     {
-      "title": "Comments",
-      "type": "Tutorial",
-      "link": "https://kernelnewbies.org#",
-      "source": "Kernel Newbies"
-    },
-    {
-      "title": "Menu",
-      "type": "Tutorial",
-      "link": "https://kernelnewbies.org#",
-      "source": "Kernel Newbies"
-    },
-    {
-      "title": "FindPage",
-      "type": "Tutorial",
-      "link": "https://kernelnewbies.org/FindPage",
-      "source": "Kernel Newbies"
-    },
-    {
-      "title": "HelpContents",
-      "type": "Tutorial",
-      "link": "https://kernelnewbies.org/HelpContents",
-      "source": "Kernel Newbies"
-    },
-    {
-      "title": "HelpOnMoinWikiSyntax",
-      "type": "Tutorial",
-      "link": "https://kernelnewbies.org/HelpOnMoinWikiSyntax",
-      "source": "Kernel Newbies"
-    },
-    {
-      "title": "Frontpage",
-      "type": "Tutorial",
+      "title": "Kernel Newbies Main Page",
+      "type": "Learning",
       "link": "https://kernelnewbies.org/",
       "source": "Kernel Newbies"
     },
     {
-      "title": "Kernel Hacking",
+      "title": "First Kernel Patch Tutorial",
       "type": "Tutorial",
-      "link": "https://kernelnewbies.org/KernelHacking",
+      "link": "https://kernelnewbies.org/FirstKernelPatch",
       "source": "Kernel Newbies"
     },
     {
-      "title": "Kernel Documentation",
-      "type": "Tutorial",
+      "title": "Kernel Development Guide",
+      "type": "Guide",
       "link": "https://kernelnewbies.org/Documents",
-      "source": "Kernel Newbies"
-    },
-    {
-      "title": "Kernel Glossary",
-      "type": "Tutorial",
-      "link": "https://kernelnewbies.org/KernelGlossary",
       "source": "Kernel Newbies"
     }
   ],
-  "last_updated": "2026-04-29T01:46:21.857590",
+  "last_updated": "2026-04-30T01:45:33.917451",
   "version": "1.0"
 }
