@@ -28,7 +28,7 @@
       "title": "Visit LWN.net for Latest Linux News",
       "source": "LWN.net",
       "link": "https://lwn.net/",
-      "date": "2026-05-11"
+      "date": "2026-05-12"
     }
   ],
   "projects": [
@@ -119,6 +119,6 @@
       "source": "Kernel Newbies"
     }
   ],
-  "last_updated": "2026-05-11T01:52:05.364400",
+  "last_updated": "2026-05-12T01:47:26.747934",
   "version": "1.0"
 }
